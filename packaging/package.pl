@@ -338,7 +338,6 @@ sub process_collection {
         open(PORTFILE, ">", "$PORTFILES/$portname/Portfile");
         print PORTFILE <<"EOF";
 # -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
-# \$Id\$
 
 PortSystem          1.0
 PortGroup           texlive 1.0
@@ -348,7 +347,7 @@ version             $revision
 revision            $portrevision
 
 categories          tex
-maintainers         dports
+maintainers         {dports @drkp}
 license             Copyleft Permissive
 description         TeX Live: $tlc->{shortdesc}
 long_description    $longdesc
