@@ -20,11 +20,11 @@ use File::Basename;
 #
 
 my $tlpdb = TeXLive::TLPDB->new(root => "/home/drkp/texlive-trunk/Master");
-my $STAGE = "/home/drkp/texlive/packaging/stage/";
+my $STAGE = "/home/drkp/sandbox/macports-texlive/packaging/stage/";
 my $TEXMFSRC = "/home/drkp/texlive-trunk/Master";
-my $PORTFILES = "/home/drkp/texlive/packaging/portfiles";
-my $PORTFILEINCLUDE = "/home/drkp/texlive/packaging/portfileinclude";
-my $EXISTINGPORTFILES = "/home/drkp/texlive/packaging/macports-tex/";
+my $PORTFILES = "/home/drkp/sandbox/macports-texlive/packaging/portfiles";
+my $PORTFILEINCLUDE = "/home/drkp/sandbox/macports-texlive/packaging/portfileinclude";
+my $EXISTINGPORTFILES = "/home/drkp/sandbox/macports-texlive/packaging/macports-tex/";
 
 my $MAKE_PACKAGES=0;
 my $MAKE_PORTFILES=1;
