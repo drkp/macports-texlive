@@ -1,0 +1,5 @@
+depends_run         port:latexmk \
+                    port:detex \
+                    port:latexdiff \
+                    port:pdfjam \
+                    port:dvipng

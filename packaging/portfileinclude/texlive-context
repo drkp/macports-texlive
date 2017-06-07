@@ -1,0 +1,9 @@
+depends_lib-append  port:texlive-latex \
+                    port:texlive-metapost \
+                    port:texlive-xetex \
+                    port:texlive-fonts-recommended \
+                    port:texlive-math-extra
+
+post-deactivate {
+    delete ${texlive_texmfsysvar}/luatex-cache
+}

@@ -1,0 +1,4 @@
+depends_run-append  port:lcdf-typetools \
+                    port:ps2eps \
+                    port:psutils \
+                    port:t1utils
