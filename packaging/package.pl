@@ -25,11 +25,12 @@ my $TEXMFSRC = "/home/drkp/texlive-trunk/Master";
 my $PORTFILES = "/home/drkp/sandbox/macports-texlive/packaging/portfiles";
 my $PORTFILEINCLUDE = "/home/drkp/sandbox/macports-texlive/packaging/portfileinclude";
 my $EXISTINGPORTFILES = "/home/drkp/sandbox/macports-texlive/packaging/macports-tex/";
+my $EXISTINGPACKAGES = "/sshfs/giraffe/var/www/html/texlive/test";
 
-my $MAKE_PACKAGES=0;
+my $MAKE_PACKAGES=1;
 my $MAKE_PORTFILES=1;
 my $REVBUMP=1;
-
+my $USE_EXISTING_PACKAGE_IF_SAME_VERSION=1;
 
 # Collections to skip packaging
 #   texworks and wintools are Windows-specific
@@ -56,6 +57,8 @@ sub portname_from_collection {
     $collection =~ s/-lang/-lang-/;
     $collection =~ s/extra$/-extra/;
     $collection =~ s/recommended$/-recommended/;
+    $collection =~ s/plaingeneric$/plain-generic/;
+    $collection =~ s/mathscience$/math-science/;
     return $collection
 }
 
@@ -233,43 +236,50 @@ sub process_collection {
     my $distname = "$portname-$revision";
 
     if ($MAKE_PACKAGES && ! -e "$STAGE/$distname-run.tar.xz") {
-        my $pkgdir = "$STAGE/$distname";
-        my $pkginfodir = "$pkgdir/tlpkginfo";
-        mkdir $pkgdir;
-        mkdir $pkginfodir;
-        mkdir "$pkgdir/docfiles";
-        mkdir "$pkgdir/runfiles";
-        mkdir "$pkgdir/srcfiles";
-        open(INFO, ">", "$pkginfodir/pkgs");
-        foreach (@pkgs) {
-            print INFO "$_->[0] $_->[1]\n";
+        if ($USE_EXISTING_PACKAGE_IF_SAME_VERSION &&
+            -e "$EXISTINGPACKAGES/$distname-run.tar.xz" &&
+            -e "$EXISTINGPACKAGES/$distname-doc.tar.xz" &&
+            -e "$EXISTINGPACKAGES/$distname-src.tar.xz") {
+            print("  using existing package for $distname\n");
+            system("cp $EXISTINGPACKAGES/$distname-*.tar.xz $STAGE/");
+        } else {
+            my $pkgdir = "$STAGE/$distname";
+            my $pkginfodir = "$pkgdir/tlpkginfo";
+            mkdir $pkgdir;
+            mkdir $pkginfodir;
+            mkdir "$pkgdir/docfiles";
+            mkdir "$pkgdir/runfiles";
+            mkdir "$pkgdir/srcfiles";
+            open(INFO, ">", "$pkginfodir/pkgs");
+            foreach (@pkgs) {
+                print INFO "$_->[0] $_->[1]\n";
+            }
+            open(INFO, ">", "$pkginfodir/docfiles");
+            foreach (@docfiles) {
+                system "mkdir -p $pkgdir/docfiles/".dirname($_);
+                if (system("cp -a $TEXMFSRC/$_ $pkgdir/docfiles/$_") == 0) {
+                    print INFO "$_\n";
+                }
+            }    
+            open(INFO, ">", "$pkginfodir/runfiles");
+            foreach (@runfiles) {
+                system "mkdir -p $pkgdir/runfiles/".dirname($_);
+                if (system("cp -a $TEXMFSRC/$_ $pkgdir/runfiles/$_") == 0) {
+                    print INFO "$_\n";
+                }
+            }    
+            open(INFO, ">", "$pkginfodir/srcfiles");
+            foreach (@srcfiles) {
+                system "mkdir -p $pkgdir/srcfiles/".dirname($_);
+                if (system("cp -a $TEXMFSRC/$_ $pkgdir/srcfiles/$_") == 0) {
+                    print INFO "$_\n";
+                }
+            }
+            close INFO;
+            system "cd $STAGE && tar -cf $distname-run.tar $distname --exclude $distname/docfiles --exclude $distname/srcfiles && xz $distname-run.tar";
+            system "cd $STAGE && tar -cf $distname-doc.tar $distname/docfiles && xz $distname-doc.tar";
+            system "cd $STAGE && tar -cf $distname-src.tar $distname/srcfiles && xz $distname-src.tar";
         }
-        open(INFO, ">", "$pkginfodir/docfiles");
-        foreach (@docfiles) {
-            system "mkdir -p $pkgdir/docfiles/".dirname($_);
-            if (system("cp -a $TEXMFSRC/$_ $pkgdir/docfiles/$_") == 0) {
-                print INFO "$_\n";
-            }
-        }    
-        open(INFO, ">", "$pkginfodir/runfiles");
-        foreach (@runfiles) {
-            system "mkdir -p $pkgdir/runfiles/".dirname($_);
-            if (system("cp -a $TEXMFSRC/$_ $pkgdir/runfiles/$_") == 0) {
-                print INFO "$_\n";
-            }
-        }    
-        open(INFO, ">", "$pkginfodir/srcfiles");
-        foreach (@srcfiles) {
-            system "mkdir -p $pkgdir/srcfiles/".dirname($_);
-            if (system("cp -a $TEXMFSRC/$_ $pkgdir/srcfiles/$_") == 0) {
-                print INFO "$_\n";
-            }
-        }
-        close INFO;
-        system "cd $STAGE && tar -cf $distname-run.tar $distname --exclude $distname/docfiles --exclude $distname/srcfiles && xz $distname-run.tar";
-        system "cd $STAGE && tar -cf $distname-doc.tar $distname/docfiles && xz $distname-doc.tar";
-        system "cd $STAGE && tar -cf $distname-src.tar $distname/srcfiles && xz $distname-src.tar";
-
     }
 
     if ($MAKE_PORTFILES) {
@@ -305,9 +315,9 @@ sub process_collection {
             close(OLDPORTFILE);
         }
         my $portrevision;
-            print "oldportversion = $oldportversion, revision = $revision";
         if ($oldportversion == $revision) {
             if ($REVBUMP) {
+                print("  incrementing revision as port version hasn't changed\n");
                 $portrevision = $oldportrevision + 1;
             } else {
                 $portrevision = $oldportrevision;
