@@ -347,7 +347,7 @@ version             $revision
 revision            $portrevision
 
 categories          tex
-maintainers         {dports @drkp}
+maintainers         {dports \@drkp}
 license             Copyleft Permissive
 description         TeX Live: $tlc->{shortdesc}
 long_description    $longdesc
