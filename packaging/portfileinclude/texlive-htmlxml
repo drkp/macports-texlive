@@ -1,5 +1,5 @@
 depends_lib-append  port:texlive-latex-recommended \
-                    port:texlive-generic-recommended
+                    port:texlive-plain-generic
 
  
 post-patch {
