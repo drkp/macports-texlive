@@ -1,0 +1,20 @@
+texlive-common distfiles for MacPorts TeX Live, 2017 release
+
+This directory contains configuration files for a TeX Live
+installation managed by MacPorts, and the scripts used for generating
+them. They are unlikely to be useful except in the context of the
+texlive-common port.
+
+Most of the files contained here are used as the headers for the
+configuration files texmf.cnf, texmfcnf.lua, fmtutil.cnf, updmap.cfg,
+and language.{dat,def,lua}, which are later concatenated with other
+configuration fragments installed by other ports. Many of these
+headers contain placeholders such as @@PREFIX@@ which must be resolved
+during installation. They are derived from the corresponding
+configuration files from TeX Live, most of which are public domain.
+
+texlive-update-cnf is the simple script used at runtime to regenerate
+these configuration files from fragments. It is released into the
+public domain.
+
+ - Dan Ports <dports@macports.org>
