@@ -43,10 +43,10 @@ TEXMFSYSCONFIG = @@TEXMFSYSCONFIG@@
 TEXMFHOME = ~/@@TEXMFHOME@@
 
 % TEXMFVAR, where texconfig/updmap/fmtutil store cached runtime data.
-TEXMFVAR = ~/.texlive2016/texmf-var
+TEXMFVAR = ~/.texlive2017/texmf-var
 
 % TEXMFCONFIG, where texconfig/updmap/fmtutil store configuration data.
-TEXMFCONFIG = ~/.texlive2016/texmf-config
+TEXMFCONFIG = ~/.texlive2017/texmf-config
 
 % List all the texmf trees. For an explanation of what they are, see the
 % TeX Live manual.
