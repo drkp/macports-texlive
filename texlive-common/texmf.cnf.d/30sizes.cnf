@@ -101,6 +101,7 @@ max_strings.bibtex  = 100000
 max_strings.bibtex8 = 100000
 max_strings.bibtexu = 100000
 max_strings.pbibtex = 100000
+max_strings.upbibtex = 100000
 
 % GFtype only.
 line_length.gftype = 500
@@ -108,5 +109,5 @@ max_rows.gftype = 8191
 max_cols.gftype = 8191
 
 % Guess input encoding (SJIS vs. Unicode, etc.) in pTeX and friends?
-% Default is 0, to not guess.
+% Default is 1, to guess. Used on Windows only.
 guess_input_kanji_encoding = 1
