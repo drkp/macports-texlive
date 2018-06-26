@@ -7,7 +7,7 @@ use File::Basename;
 use List::MoreUtils qw(uniq);
 
 BEGIN {
-    unshift (@INC, "/home/drkp/texlive-trunk/Master/tlpkg");
+    unshift (@INC, "/u/dan/texlive-trunk/Master/tlpkg");
 }
 
 use TeXLive::TLPDB;
@@ -19,15 +19,15 @@ use File::Basename;
 # Configuration
 #
 
-my $tlpdb = TeXLive::TLPDB->new(root => "/home/drkp/texlive-trunk/Master");
-my $STAGE = "/home/drkp/sandbox/macports-texlive/packaging/stage/";
-my $TEXMFSRC = "/home/drkp/texlive-trunk/Master";
-my $PORTFILES = "/home/drkp/sandbox/macports-texlive/packaging/portfiles";
-my $PORTFILEINCLUDE = "/home/drkp/sandbox/macports-texlive/packaging/portfileinclude";
-my $EXISTINGPORTFILES = "/home/drkp/sandbox/macports-texlive/packaging/macports-tex/";
+my $tlpdb = TeXLive::TLPDB->new(root => "/u/dan/texlive-trunk/Master");
+my $STAGE = "/u/dan/sandbox/macports-texlive/packaging/stage/";
+my $TEXMFSRC = "/u/dan/texlive-trunk/Master";
+my $PORTFILES = "/u/dan/sandbox/macports-texlive/packaging/portfiles";
+my $PORTFILEINCLUDE = "/u/dan/sandbox/macports-texlive/packaging/portfileinclude";
+my $EXISTINGPORTFILES = "/u/dan/sandbox/macports-texlive/packaging/macports-tex/";
 my $EXISTINGPACKAGES = "/sshfs/giraffe/var/www/html/texlive/test";
 
-my $MAKE_PACKAGES=1;
+my $MAKE_PACKAGES=0;
 my $MAKE_PORTFILES=1;
 my $REVBUMP=1;
 my $USE_EXISTING_PACKAGE_IF_SAME_VERSION=1;
