@@ -78,7 +78,7 @@ TEXMF = {$TEXMFAUXTREES$TEXMFCONFIG,$TEXMFVAR,$TEXMFHOME,!!$TEXMFLOCAL,!!$TEXMFS
 % present, it will be used, and the disk will not (usually) be searched,
 % regardless of !!.  Although in principle a directory listed here need
 % not contain an ls-R file, in practice they all should.
-TEXMFDBS = {!!$TEXMFLOCAL,!!$TEXMFSYSCONFIG,!!$TEXMFSYSVAR,!!$TEXMFDIST}
+TEXMFDBS = {!!$TEXMFLOCAL,!!$TEXMFSYSCONFIG,!!$TEXMFSYSVAR,!!$TEXMFPORTS,!!$TEXMFDIST}
 
 % The system trees.  These are the trees that are shared by all users.
 % If a tree appears in this list, the mktex* scripts will use
