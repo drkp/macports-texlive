@@ -1,4 +1,4 @@
 texlive.exclude     tlpkg/tlpostcode/xetex.pl
 
 depends_lib-append  port:texlive-latex-recommended \
-                    port:texlive-plain-generic
+                    port:texlive-generic-recommended

@@ -1,0 +1,7 @@
+pre-activate {
+    # Handle conflicts for TL2019 upgrade
+    if { ![catch {set vers [lindex [registry_active texlive-publishers] 0]}]
+         && ([vercmp [lindex $vers 1] 50870] < 0) } {
+        registry_deactivate_composite texlive-publishers "" [list ports_nodepcheck 1]
+    }
+}

@@ -1,15 +1,21 @@
 # beamer requires pgf; see #25478
 depends_lib-append port:pgf
 
+# Handle conflicts for TL2015 upgrade
 pre-activate {
-    # Handle conflicts for TL2018 upgrade
+    if { ![catch {set vers [lindex [registry_active texlive-xetex] 0]}]
+         && ([vercmp [lindex $vers 1] 37409] < 0) } {
+        registry_deactivate_composite texlive-xetex "" [list ports_nodepcheck 1]
+    }
+
+    if { ![catch {set vers [lindex [registry_active texlive-humanities] 0]}]
+         && ([vercmp [lindex $vers 1] 37330] < 0) } {
+        registry_deactivate_composite texlive-humanities "" [list ports_nodepcheck 1]
+    }
+
+    # Handle conflicts for TL2019 upgrade
     if { ![catch {set vers [lindex [registry_active texlive-latex-extra] 0]}]
-         && ([vercmp [lindex $vers 1] 47410] < 0) } {
+         && ([vercmp [lindex $vers 1] 50885] < 0) } {
         registry_deactivate_composite texlive-latex-extra "" [list ports_nodepcheck 1]
     }
-    if { ![catch {set vers [lindex [registry_active texlive-luatex] 0]}]
-         && ([vercmp [lindex $vers 1] 47444] < 0) } {
-        registry_deactivate_composite texlive-luatex "" [list ports_nodepcheck 1]
-    }
 }
-
