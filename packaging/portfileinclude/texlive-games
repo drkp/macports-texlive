@@ -1,1 +1,1 @@
-depends_lib-append port:texlive-generic-extra
+depends_lib-append port:texlive-plain-generic
