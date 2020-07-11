@@ -3,16 +3,19 @@
 # The format of the table is:
 #
 # format  engine  pattern-file  arguments
-#
-# The last "argument" must be the name of the file on which to run
-# the ini-engine (such as initex).  If the ini-engine is e-TeX, and the
-# e-TeX extensions should be enabled, the filename must be prefixed with
-# a * character; this is essentially equivalent to the -etex option.
-# 
-# fmtutil always passes the -ini option to the engine.
-# If no pattern-file is desired, use -.
 # Either spaces or tabs can be used as separators.
+#
+# The last "argument" must be the name of the file on which to run the
+# engine (e.g., initex). If the ini-engine is e-TeX (or compatible), and
+# the e-TeX extensions need to be enabled explicitly, the filename must
+# be prefixed with a * character; this is essentially equivalent to the
+# -etex option. (So don't use it if the engine doesn't support -etex.)
 # 
+# The purpose of the pattern-file is to support fmtutil's --byhyphen
+# option. It is not included in the command line to rebuild the format.
+# If no pattern-file is desired, use -.
+# fmtutil always passes the -ini option to the engine.
+#
 # Other notes:
 # 1) tex and amstex just load hyphen.tex. No customization.
 #    You can have your own customized (via babel's hyphen.cfg)
