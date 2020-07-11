@@ -4,3 +4,11 @@ depends_run         port:latexmk \
                     port:pdfjam \
                     port:dvipng \
                     path:bin/dvisvgm:dvisvgm
+
+# dependencies for latexindent
+depends_run-append  port:p5.28-yaml-tiny \
+                    port:p5.28-file-homedir \
+                    port:p5.28-getopt-long \
+                    port:p5.28-data-dumper \
+                    port:p5.28-log-log4perl \
+                    port:p5.28-log-dispatch
