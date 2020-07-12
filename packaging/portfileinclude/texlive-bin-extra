@@ -1,4 +1,5 @@
-depends_run         port:latexmk \
+depends_run         port:texlive-tlpdb \
+                    port:latexmk \
                     port:detex \
                     port:latexdiff \
                     port:pdfjam \

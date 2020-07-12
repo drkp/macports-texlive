@@ -1,2 +1,0 @@
-# use pgf port to satisfy pgf dependency (see #25478)
-depends_lib-append port:pgf

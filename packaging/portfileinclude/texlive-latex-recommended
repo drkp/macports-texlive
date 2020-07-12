@@ -1,5 +1,5 @@
-# beamer requires pgf; see #25478
-depends_lib-append port:pgf
+# beamer requires pgf; see #25478 (pgf is now in texlive-pictures)
+depends_lib-append port:texlive-pictures
 
 pre-activate {
     # Handle conflicts for TL2018 upgrade
