@@ -1,0 +1,20 @@
+
+- Find the release revision for the TL SVN repo
+- Export source repos and tar + xz: 
+    - Build -> texlive-source-${year}.{revision}
+    - Master/tlpkg/TeXLive -> tlpkg-TeXLive-${year}.${revision}
+    - Master/tlpkg/texlive.tlpdb -> texlive.tlpdb.${year}.${revision}
+- Update texlive-bin portfile, fixing any patches needed
+- Run package.pl to generate distfiles and portfiles
+- Update texlive-common
+   - Sync config files in this repo with fmtutil-hdr.conf, language.*, texmf.cnf
+   - export a tarfile as distfile
+- Update texlive-tlpdb (should just be a version bump)
+- Update biblatex-biber (and check for new dependencies)
+- Bump the metaport version
+- Check versions of any dependencies of texlive-bin-extra
+- Add registry_deactivate hacks
+- Switch back to non-test repo and make sure distfiles are tehere
+- Revbump any dependents on texlive-bin
+- Update the TeXLivePackages wiki page
+   - (cd /opt/local/share/doc/texlive/ ; foreach x in texlive-* ; do ; echo "= $x =" ; grep '^ ' $x | sed -e 's/^/ * /' ; echo ; done) | pbcopy
