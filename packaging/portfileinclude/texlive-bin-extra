@@ -1,6 +1,6 @@
 depends_run         port:texlive-tlpdb \
                     port:latexmk \
-                    port:detex \
+                    port:opendetex \
                     port:latexdiff \
                     port:pdfjam \
                     port:dvipng \
