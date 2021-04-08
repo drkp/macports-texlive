@@ -12,4 +12,5 @@ depends_run-append  port:p5.28-yaml-tiny \
                     port:p5.28-getopt-long \
                     port:p5.28-data-dumper \
                     port:p5.28-log-log4perl \
-                    port:p5.28-log-dispatch
+                    port:p5.28-log-dispatch \
+                    port:p5.28-unicode-linebreak
