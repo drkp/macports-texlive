@@ -148,7 +148,7 @@ sub process_collection {
                 $revision = $tlp->revision;
             }
             
-            if (!($tlpname =~ m/\.x86_64-darwin$/)) {
+            if (!($tlpname =~ m/\.universal-darwin$/)) {
                 if (defined $tlp->shortdesc) {
                     push(@pkgs, ([$tlpname, $tlp->shortdesc]));
                 } else {
@@ -158,7 +158,7 @@ sub process_collection {
             push(@docfiles, $tlp->docfiles);
             push(@runfiles, $tlp->runfiles);
             push(@srcfiles, $tlp->srcfiles);
-            for my $binfile (@{$tlp->binfiles->{'x86_64-darwin'}}) {
+            for my $binfile (@{$tlp->binfiles->{'universal-darwin'}}) {
                 #print " $tlpname provides $binfile\n";
                 if (!(basename($binfile) ~~ @skip_binaries)) {
                     $binfiles{basename($binfile)} = 1;
@@ -167,7 +167,7 @@ sub process_collection {
 
             foreach ($tlp->depends) {
                 if (/\.ARCH$/) {
-                    s/\.ARCH$/.x86_64-darwin/;
+                    s/\.ARCH$/.universal-darwin/;
                     push (@queue, $_);
                 }
             }
