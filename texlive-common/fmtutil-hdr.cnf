@@ -29,4 +29,6 @@
 # 
 # 4) usual comments start with "# ", whereas disabled configurations
 #    start with "#! " in this file.
-
+#
+# 5) The entries in the main TeX Live fmtutil.cnf are created from the
+#    AddFormat directives in (ultimately) the *.tlpsrc files. Don't edit here.

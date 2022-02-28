@@ -20,10 +20,10 @@ use File::Basename;
 #
 
 my $tlpdb = TeXLive::TLPDB->new(root => "/scratch/texlive-trunk/Master");
-my $STAGE = "/scratch/macports-texlive/packaging/stage/";
+my $STAGE = "/u/dan/sandbox/macports-texlive/packaging/stage/";
 my $TEXMFSRC = "/scratch/texlive-trunk/Master";
-my $PORTFILES = "/scratch/macports-texlive/packaging/portfiles";
-my $PORTFILEINCLUDE = "/scratch/macports-texlive/packaging/portfileinclude";
+my $PORTFILES = "/u/dan/sandbox/macports-texlive/packaging/portfiles";
+my $PORTFILEINCLUDE = "/u/dan/sandbox/macports-texlive/packaging/portfileinclude";
 my $EXISTINGPORTFILES = "/u/dan/sandbox/macports-ports/tex/";
 my $EXISTINGPACKAGES = "/sshfs/geoduck/var/www/html/ambulatoryclam/texlive/test";
 
@@ -39,10 +39,10 @@ my $USE_EXISTING_PACKAGE_IF_SAME_VERSION=1;
 my @skip_collections = qw(collection-documentation-greek collection-texinfo collection-texworks collection-wintools);
 
 # Individual packages to skip
-my @skip_packages = qw(texlive-msg-translations texlive.infra xindy asymptote latexmk detex t1utils psutils pstools ps2eps dvi2tty getafm pdfjam latexdiff biber dvipng dot2texi lcdftypetools dvisvgm);
+my @skip_packages = qw(texlive-msg-translations texlive-scripts texlive.infra xindy asymptote latexmk detex t1utils psutils pstools ps2eps dvi2tty getafm pgf pdfjam latexdiff biber dvipng dot2texi lcdftypetools);
 
 # Binaries we don't build
-my @skip_binaries = qw(man xdvi-xaw);
+my @skip_binaries = qw(xdvi-xaw);
 
 # Packages to move
 my %relocate_packages; # = ("kastrup" => "texlive-generic-recommended");
@@ -50,19 +50,6 @@ my %relocate_packages_inv;
 while ((my $pkg, my $coll) = each(%relocate_packages)) {
     push(@{$relocate_packages_inv{$coll}}, $pkg);
 }
-
-# Additional files to add
-# format is: package => (docfiles, runfiles, srcfiles, binfiles)
-#
-# texlive-basic: add mktexlsr, which is in texlive.infra with a bunch
-# of stuff we don't install
-my %additional_files =
-    ("texlive-basic" => [["texmf-dist/doc/man/man1/mktexlsr.1",
-                           "texmf-dist/doc/man/man1/mktexlsr.man1.pdf"],
-                          ["texmf-dist/scripts/texlive/mktexlsr"],
-                          [],
-                          ["mktexlsr"]]);
-                     
 
 sub portname_from_collection {
     my $collection = shift;
@@ -112,12 +99,10 @@ sub add_checksums {
     chomp($sha256);
     $sha256 =~ s/^.*= //g;
     close HASH;
-    my $filesize = -s "$STAGE/$filename";
 
     push(@$checksums, "$filename");
     push(@$checksums, "rmd160  $rmd160"); 
     push(@$checksums, "sha256  $sha256");
-    push(@$checksums, "size    $filesize");
 }
 
 
@@ -138,21 +123,6 @@ sub process_collection {
             push(@queue, $relocatedpkg);
         }
     }
-
-    if (exists($additional_files{$portname})) {
-        print("  Adding additional files from config\n");
-        my $additional_docfiles = $additional_files{$portname}[0];
-        my $additional_runfiles = $additional_files{$portname}[1];
-        my $additional_srcfiles = $additional_files{$portname}[2];
-        my $additional_binfiles = $additional_files{$portname}[3];
-        push(@docfiles, @$additional_docfiles);
-        push(@runfiles, @$additional_runfiles);
-        push(@srcfiles, @$additional_srcfiles);
-        foreach (@$additional_binfiles) {
-            $binfiles{$_} = 1;
-        }
-    }
-        
     foreach my $tlpname (@queue) {
         if ($tlpname ~~ @skip_packages) {
             print("  Skipping individual package $tlpname\n");
