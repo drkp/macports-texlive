@@ -39,7 +39,7 @@ my $USE_EXISTING_PACKAGE_IF_SAME_VERSION=1;
 my @skip_collections = qw(collection-documentation-greek collection-texinfo collection-texworks collection-wintools);
 
 # Individual packages to skip
-my @skip_packages = qw(texlive-msg-translations texlive-scripts texlive.infra xindy asymptote latexmk detex t1utils psutils pstools ps2eps dvi2tty getafm pgf pdfjam latexdiff biber dvipng dot2texi lcdftypetools);
+my @skip_packages = qw(texlive-msg-translations texlive.infra xindy asymptote latexmk detex t1utils psutils pstools ps2eps dvi2tty getafm pdfjam latexdiff biber dvipng dot2texi lcdftypetools);
 
 # Binaries we don't build
 my @skip_binaries = qw(xdvi-xaw);
@@ -429,4 +429,4 @@ foreach my $pkg ($tlpdb->collections()) {
    process_collection($pkg);
 }
 
-#process_collection("collection-fontutils");
+#process_collection("collection-basic");
