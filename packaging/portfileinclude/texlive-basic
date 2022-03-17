@@ -18,6 +18,14 @@ post-patch {
     reinplace "s|rungs|gs|g" ${worksrcpath}/runfiles/texmf-dist/dvipdfmx/dvipdfmx.cfg
 }
 
+
+# mktexlsr is in texlive.infra which we don't install
+# The perl version should be sufficient.
+post-destroot {
+    ln -s mktexlsr.pl ${destroot}${texlive_texmfdist}/scripts/texlive/mktexlsr
+}
+texlive.binaries-append mktexlsr
+
 texlive.forceupdatecnf yes
 texlive.use_mktexlsr_on_deactivate no
 
