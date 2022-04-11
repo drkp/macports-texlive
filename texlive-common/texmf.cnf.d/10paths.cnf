@@ -46,10 +46,10 @@ TEXMFSYSCONFIG = @@TEXMFSYSCONFIG@@
 TEXMFHOME = ~/@@TEXMFHOME@@
 
 % TEXMFVAR, where texconfig/updmap/fmtutil store cached runtime data.
-TEXMFVAR = ~/.texlive2021/texmf-var
+TEXMFVAR = ~/.texlive2022/texmf-var
 
 % TEXMFCONFIG, where texconfig/updmap/fmtutil store configuration data.
-TEXMFCONFIG = ~/.texlive2021/texmf-config
+TEXMFCONFIG = ~/.texlive2022/texmf-config
 
 % This is the value manipulated by tlmgr's auxtrees subcommand in the
 % root texmf.cnf. Kpathsea warns about a literally empty string for a
@@ -159,15 +159,15 @@ TEXINPUTS.latex-dev     = $TEXMFDOTDIR;$TEXMF/tex/{latex-dev,latex,generic,}//
 TEXINPUTS.latex209      = $TEXMFDOTDIR;$TEXMF/tex/{latex209,generic,latex,}//
 TEXINPUTS.olatex        = $TEXMFDOTDIR;$TEXMF/tex/{latex,generic,}//
 
+% e-TeX.
+TEXINPUTS.elatex        = $TEXMFDOTDIR;$TEXMF/tex/{latex,generic,}//
+TEXINPUTS.etex          = $TEXMFDOTDIR;$TEXMF/tex/{plain,generic,latex,}//
+
 % MLTeX.
 TEXINPUTS.frlatex       = $TEXMFDOTDIR;$TEXMF/tex/{french,latex,generic,}//
 TEXINPUTS.frtex         = $TEXMFDOTDIR;$TEXMF/tex/{french,plain,generic,latex,}//
 TEXINPUTS.mllatex       = $TEXMFDOTDIR;$TEXMF/tex/{latex,generic,}//
 TEXINPUTS.mltex         = $TEXMFDOTDIR;$TEXMF/tex/{plain,generic,latex,}//
-
-% e-TeX.
-TEXINPUTS.elatex        = $TEXMFDOTDIR;$TEXMF/tex/{latex,generic,}//
-TEXINPUTS.etex          = $TEXMFDOTDIR;$TEXMF/tex/{plain,generic,latex,}//
 
 % pdfTeX.
 TEXINPUTS.pdfcslatex    = $TEXMFDOTDIR;$TEXMF/tex/{cslatex,csplain,latex,generic,}//
@@ -231,25 +231,25 @@ TEX.pmpost = eptex
 TEXINPUTS.ptex-ng   = $TEXMFDOTDIR;$TEXMF/tex/{uptex,ptex,plain,generic,latex,}//
 TEXINPUTS.platex-ng = $TEXMFDOTDIR;$TEXMF/tex/{uplatex,platex,latex,generic,}//
 
-% (e)up(La)TeX, and for upmpost
+% (e)up(La)TeX, and for upmpost.
 TEXINPUTS.uplatex     = $TEXMFDOTDIR;$TEXMF/tex/{uplatex,platex,latex,generic,}//
 TEXINPUTS.uplatex-dev = $TEXMFDOTDIR;$TEXMF/tex/{latex-dev,uplatex,platex,latex,generic,}//
 TEXINPUTS.uptex   = $TEXMFDOTDIR;$TEXMF/tex/{uptex,ptex,plain,generic,latex,}//
 TEXINPUTS.euptex  = $TEXMFDOTDIR;$TEXMF/tex/{uptex,ptex,plain,generic,latex,}//
 TEX.upmpost = euptex
 
-% pBibTeX bibliographies and style files.
-BIBINPUTS.pbibtex       = $TEXMFDOTDIR;$TEXMF/{pbibtex,bibtex}/bib//
-BSTINPUTS.pbibtex       = $TEXMFDOTDIR;$TEXMF/{pbibtex,bibtex}/bst//
-
-% upBibTeX bibliographies and style files.
-BIBINPUTS.upbibtex      = $TEXMFDOTDIR;$TEXMF/{upbibtex,pbibtex,bibtex}/bib//
-BSTINPUTS.upbibtex      = $TEXMFDOTDIR;$TEXMF/{upbibtex,pbibtex,bibtex}/bst//
-
 % ConTeXt.
 TEXINPUTS.context       = $TEXMFDOTDIR;$TEXMF/tex/{context,plain,generic,}//
 
-% jadetex.
+% OpTeX.
+TEXINPUTS.optex         = $TEXMFDOTDIR;$TEXMF/tex/{optex,plain,generic,}//
+
+% HiTeX.
+TEXINPUTS.hilatex       = $TEXMFDOTDIR;$TEXMF/tex/{hilatex,latex,hitex,generic,}//
+TEXINPUTS.hilatex-dev   = $TEXMFDOTDIR;$TEXMF/tex/{latex-dev,hilatex,latex,hitex,generic,}//
+TEXINPUTS.hitex         = $TEXMFDOTDIR;$TEXMF/tex/{hitex,plain,generic,latex,}//
+
+% JadeTeX.
 TEXINPUTS.jadetex       = $TEXMFDOTDIR;$TEXMF/tex/{jadetex,latex,generic,latex,}//
 TEXINPUTS.pdfjadetex    = $TEXMFDOTDIR;$TEXMF/tex/{jadetex,latex,generic,latex,}//
 
@@ -265,9 +265,6 @@ TEXINPUTS.frpdftex      = $TEXMFDOTDIR;$TEXMF/tex/{french,plain,generic,latex,}/
 
 % Earlier entries override later ones, so put this generic one last.
 TEXINPUTS               = $TEXMFDOTDIR;$TEXMF/tex/{$progname,generic,latex,}//
-
-% ttf2tfm.
-TTF2TFMINPUTS =                 $TEXMFDOTDIR;$TEXMF/ttf2pk//
 
 % Metafont, MetaPost inputs.
 MFINPUTS = $TEXMFDOTDIR;$TEXMF/metafont//;{$TEXMF/fonts,$VARTEXFONTS}/source//
@@ -329,6 +326,14 @@ BSTINPUTS = $TEXMFDOTDIR;$TEXMF/bibtex/{bst,csf}//
 % MlBibTeX.
 MLBIBINPUTS = $TEXMFDOTDIR;$TEXMF/bibtex/bib/{mlbib,}//
 MLBSTINPUTS = $TEXMFDOTDIR;$TEXMF/bibtex/{mlbst,bst}//
+
+% pBibTeX bibliographies and style files.
+BIBINPUTS.pbibtex       = $TEXMFDOTDIR;$TEXMF/{pbibtex,bibtex}/bib//
+BSTINPUTS.pbibtex       = $TEXMFDOTDIR;$TEXMF/{pbibtex,bibtex}/bst//
+
+% upBibTeX bibliographies and style files.
+BIBINPUTS.upbibtex      = $TEXMFDOTDIR;$TEXMF/{upbibtex,pbibtex,bibtex}/bib//
+BSTINPUTS.upbibtex      = $TEXMFDOTDIR;$TEXMF/{upbibtex,pbibtex,bibtex}/bst//
 
 % .ris and .bltxml bibliography formats.
 RISINPUTS = $TEXMFDOTDIR;$TEXMF/biber/ris//
@@ -444,6 +449,9 @@ TEX4HTINPUTS = $TEXMFDOTDIR;$TEXMF/tex4ht/base//;$TEXMF/tex4ht/ht-fonts/{$TEX4HT
 % TeXworks editor configuration and settings
 TW_LIBPATH = $TEXMFCONFIG/texworks
 TW_INIPATH = $TW_LIBPATH
+
+% ttf2tfm.
+TTF2TFMINPUTS = $TEXMFDOTDIR;$TEXMF/ttf2pk//
 
 % For security, do not look in . for dvipdfmx.cfg, since the D option
 % would allow command execution.
