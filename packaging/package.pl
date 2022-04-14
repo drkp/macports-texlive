@@ -27,9 +27,9 @@ my $PORTFILEINCLUDE = "/u/dan/sandbox/macports-texlive/packaging/portfileinclude
 my $EXISTINGPORTFILES = "/u/dan/sandbox/macports-ports/tex/";
 my $EXISTINGPACKAGES = "/sshfs/geoduck/var/www/html/ambulatoryclam/texlive/test";
 
-my $MAKE_PACKAGES=1;
+my $MAKE_PACKAGES=0;
 my $MAKE_PORTFILES=1;
-my $REVBUMP=1;
+my $REVBUMP=0;
 my $USE_EXISTING_PACKAGE_IF_SAME_VERSION=1;
 
 # Collections to skip packaging
@@ -39,7 +39,7 @@ my $USE_EXISTING_PACKAGE_IF_SAME_VERSION=1;
 my @skip_collections = qw(collection-documentation-greek collection-texinfo collection-texworks collection-wintools);
 
 # Individual packages to skip
-my @skip_packages = qw(texlive-msg-translations texlive.infra xindy asymptote latexmk detex t1utils psutils pstools ps2eps dvi2tty getafm pdfjam latexdiff biber dvipng dot2texi lcdftypetools);
+my @skip_packages = qw(texlive-msg-translations texlive.infra xindy asymptote latexmk detex t1utils psutils pstools ps2eps dvi2tty getafm pdfjam latexdiff biber dvipng dot2texi lcdftypetools dvisvgm);
 
 # Binaries we don't build
 my @skip_binaries = qw(xdvi-xaw);
@@ -100,9 +100,12 @@ sub add_checksums {
     $sha256 =~ s/^.*= //g;
     close HASH;
 
+    my $filesize = -s "$STAGE/$filename";
+
     push(@$checksums, "$filename");
     push(@$checksums, "rmd160  $rmd160"); 
     push(@$checksums, "sha256  $sha256");
+    push(@$checksums, "size    $filesize");
 }
 
 
@@ -417,7 +420,7 @@ if ($MAKE_PACKAGES) {
 }
 
 if ($MAKE_PORTFILES) {
-    mkdir $PORTFILES;
+    if (! -e $PORTFILES) { mkdir $PORTFILES; }
 }
 
 
@@ -429,4 +432,4 @@ foreach my $pkg ($tlpdb->collections()) {
    process_collection($pkg);
 }
 
-#process_collection("collection-basic");
+#process_collection("collection-binextra");
