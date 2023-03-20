@@ -46,10 +46,10 @@ TEXMFSYSCONFIG = @@TEXMFSYSCONFIG@@
 TEXMFHOME = ~/@@TEXMFHOME@@
 
 % TEXMFVAR, where texconfig/updmap/fmtutil store cached runtime data.
-TEXMFVAR = ~/.texlive2022/texmf-var
+TEXMFVAR = ~/.texlive2023/texmf-var
 
 % TEXMFCONFIG, where texconfig/updmap/fmtutil store configuration data.
-TEXMFCONFIG = ~/.texlive2022/texmf-config
+TEXMFCONFIG = ~/.texlive2023/texmf-config
 
 % This is the value manipulated by tlmgr's auxtrees subcommand in the
 % root texmf.cnf. Kpathsea warns about a literally empty string for a
@@ -334,6 +334,10 @@ BSTINPUTS.pbibtex       = $TEXMFDOTDIR;$TEXMF/{pbibtex,bibtex}/bst//
 % upBibTeX bibliographies and style files.
 BIBINPUTS.upbibtex      = $TEXMFDOTDIR;$TEXMF/{upbibtex,pbibtex,bibtex}/bib//
 BSTINPUTS.upbibtex      = $TEXMFDOTDIR;$TEXMF/{upbibtex,pbibtex,bibtex}/bst//
+
+% BibTeXu bibliographies and style files.
+BIBINPUTS.bibtexu       = $TEXMFDOTDIR;$TEXMF/{bibtexu,upbibtex,pbibtex,bibtex}/bib//
+BSTINPUTS.bibtexu       = $TEXMFDOTDIR;$TEXMF/{bibtexu,upbibtex,pbibtex,bibtex}/bst//
 
 % .ris and .bltxml bibliography formats.
 RISINPUTS = $TEXMFDOTDIR;$TEXMF/biber/ris//
