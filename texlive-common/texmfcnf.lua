@@ -1,12 +1,12 @@
 -- todo: come up with an auto-texlive identification (texmf-dist)
 
-local hiddentexlivepath = ".texlive2023"
+local hiddentexlivepath = ".texlive2024"
 
 return {
 
     type    = "configuration",
     version = "1.1.3",
-    date    = "2023-03-10", -- 2021-05-12 2011-06-02
+    date    = "2024-02-10", -- 2021-05-12 2011-06-02
     time    = "14:59:00",
     comment = "ConTeXt MkIV and LMTX configuration file",
     author  = "Hans Hagen, PRAGMA-ADE, Hasselt NL",
@@ -59,8 +59,8 @@ return {
             -- what installers put under texmf anywhere and sorting out problems will be a pain. But on
             -- the other hand ... home mess is normally the users own responsibility.
             --
-            -- By using prefixes we don't get expanded paths in the cache __path__
-            -- entry. This makes the tex root relocatable.
+            -- By using prefixes we don't get expanded paths in the cache __path__ entry. This makes the
+            -- tex root relocatable.
 
             TEXMFOS         = "@@TEXLIVE_BINDIR@@",
             TEXMFDIST       = "@@TEXMFDIST@@",
@@ -70,6 +70,8 @@ return {
             TEXMFSYSCONFIG  = "@@TEXMFSYSCONFIG@@",
             TEXMFFONTS      = "@@PREFIX@@/share/texmf-fonts",
             TEXMFPROJECT    = "@@PREFIX@@/share/texmf-project",
+
+            TEXMFHOME       = "home:texmf",
 
             -- We need texmfos for a few rare files but as I have a few more bin trees a hack is needed.
             -- Maybe other users also have texmf-platform-new trees, but so far I've never heard of it.
@@ -100,7 +102,7 @@ return {
             PYTHONINPUTS    = ".;$TEXMF/scripts/context/python",
             RUBYINPUTS      = ".;$TEXMF/scripts/context/ruby",
             LUAINPUTS       = ".;$TEXINPUTS;$TEXMF/scripts/context/lua//",
-            CLUAINPUTS      = ".;@@PREFIX@@/lib/{context,luatex,}/lua//",
+            CLUAINPUTS      = ".;@@PREFIX@@/lib/$engine//",
 
             -- Not really used by MkIV so they might go away.
 

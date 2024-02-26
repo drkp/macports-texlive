@@ -49,3 +49,9 @@ english hyphen.tex % do not change!
 % 
 dumylang	dumyhyph.tex    % for testing a new language.
 nohyphenation	zerohyph.tex    % a language with no patterns at all.
+
+% temp until hyph-utf8 is updated, per message from Javier,
+% https://tug.org/pipermail/tex-live/2023-September/049478.html
+vietnamese zerohyph.tex
+hebrew zerohyph.tex
+% (end of static file language.us)
