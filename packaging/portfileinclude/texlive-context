@@ -1,4 +1,5 @@
-depends_lib-append  port:texlive-latex \
+depends_lib-append  port:luametatex \
+                    port:texlive-latex \
                     port:texlive-metapost \
                     port:texlive-xetex \
                     port:texlive-fonts-recommended \
