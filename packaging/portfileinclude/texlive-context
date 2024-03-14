@@ -5,6 +5,21 @@ depends_lib-append  port:luametatex \
                     port:texlive-fonts-recommended \
                     port:texlive-math-science
 
+patchfiles-append   patch-runfiles_texmf-dist_scripts_context_lua_mtxrun.lua.diff
+
+post-patch {
+        reinplace "s|@@TEXMFSYSCONFIG@@|${texlive_texmfsysconfig}|" ${worksrcpath}/runfiles/texmf-dist/scripts/context/lua/mtxrun.lua
+}
+
+post-destroot {
+    xinstall -d ${destroot}${texlive_bindir}
+    ln -s ${prefix}/bin/luametatex ${destroot}${texlive_bindir}/context
+    ln -s ${prefix}/bin/luametatex ${destroot}${texlive_bindir}/mtxrun
+    ln -s ${texlive_texmfdist}/scripts/context/lua/context.lua \
+        ${texlive_texmfdist}/scripts/context/lua/mtxrun.lua \
+        ${destroot}${texlive_bindir}/
+}
+
 post-deactivate {
     delete ${texlive_texmfsysvar}/luatex-cache
 }
