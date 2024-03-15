@@ -10,6 +10,8 @@ texlive.exclude     texmf-dist/web2c/fmtutil.cnf \
                     texmf-dist/fonts/map/dvips/updmap \
                     texmf-dist/fonts/map/pdftex/updmap
 
+texlive.binaries-delete man
+
 patchfiles          patch-runfiles_texmf-dist_scripts_texlive_fmtutil.pl.diff
 post-patch {
     reinplace "s|@@TEXMFDIST@@|${texlive_texmfdist}|" ${worksrcpath}/runfiles/texmf-dist/scripts/texlive/fmtutil.pl
@@ -28,50 +30,4 @@ texlive.binaries-append mktexlsr
 
 texlive.forceupdatecnf yes
 texlive.use_mktexlsr_on_deactivate no
-
-pre-activate {
-    # Handle conflicts for TL2020 update
-    if { ![catch {set vers [lindex [registry_active texlive-fonts-recommended] 0]}]
-         && ([vercmp [lindex $vers 1] 54512] < 0) } {
-        registry_deactivate_composite texlive-fonts-recommended "" [list ports_nodepcheck 1]
-    }
-    if { ![catch {set vers [lindex [registry_active texlive-plain-generic] 0]}]
-         && ([vercmp [lindex $vers 1] 54476] < 0) } {
-        registry_deactivate_composite texlive-plain-generic "" [list ports_nodepcheck 1]
-    }
-    if { ![catch {set vers [lindex [registry_active texlive-latex-extra] 0]}]
-         && ([vercmp [lindex $vers 1] 54584] < 0) } {
-        registry_deactivate_composite texlive-latex-extra "" [list ports_nodepcheck 1]
-    }
-    if { ![catch {set vers [lindex [registry_active texlive-bin-extra] 0]}]
-         && ([vercmp [lindex $vers 1] 54608] < 0) } {
-        registry_deactivate_composite texlive-bin-extra "" [list ports_nodepcheck 1]
-    }
-
-    # Handle conflicts for TL2019 upgrade
-    if { ![catch {set vers [lindex [registry_active texlive-bin-extra] 0]}]
-         && ([vercmp [lindex $vers 1] 50853] < 0) } {
-        registry_deactivate_composite texlive-bin-extra "" [list ports_nodepcheck 1]
-    }
-    if { ![catch {set vers [lindex [registry_active texlive-xetex] 0]}]
-         && ([vercmp [lindex $vers 1] 50852] < 0) } {
-        registry_deactivate_composite texlive-xetex "" [list ports_nodepcheck 1]
-    }
-    if { ![catch {set vers [lindex [registry_active texlive-lang-cyrillic] 0]}]
-         && ([vercmp [lindex $vers 1] 50792] < 0) } {
-        registry_deactivate_composite texlive-lang-cyrillic "" [list ports_nodepcheck 1]
-    }
-    if { ![catch {set vers [lindex [registry_active texlive-lang-spanish] 0]}]
-         && ([vercmp [lindex $vers 1] 50792] < 0) } {
-        registry_deactivate_composite texlive-lang-spanish "" [list ports_nodepcheck 1]
-    }
-    if { ![catch {set vers [lindex [registry_active texlive-lang-european] 0]}]
-         && ([vercmp [lindex $vers 1] 50792] < 0) } {
-        registry_deactivate_composite texlive-lang-european "" [list ports_nodepcheck 1]
-    }
-    if { ![catch {set vers [lindex [registry_active texlive-lang-other] 0]}]
-         && ([vercmp [lindex $vers 1] 50792] < 0) } {
-        registry_deactivate_composite texlive-lang-other "" [list ports_nodepcheck 1]
-    }
 }
-

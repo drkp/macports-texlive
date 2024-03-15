@@ -1,0 +1,7 @@
+pre-activate {
+    # Handle conflicts for TL2024 upgrade
+    if { ![catch {set vers [lindex [registry_active texlive-latex-recommended] 0]}]
+         && ([vercmp [lindex $vers 1] 70491] < 0) } {
+        registry_deactivate_composite texlive-latex-recommended "" [list ports_nodepcheck 1]
+    }
+}
