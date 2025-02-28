@@ -30,4 +30,3 @@ texlive.binaries-append mktexlsr
 
 texlive.forceupdatecnf yes
 texlive.use_mktexlsr_on_deactivate no
-}
