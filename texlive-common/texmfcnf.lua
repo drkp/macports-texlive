@@ -1,6 +1,6 @@
 -- todo: come up with an auto-texlive identification (texmf-dist)
 
-local hiddentexlivepath = ".texlive2024"
+local hiddentexlivepath = ".texlive2025"
 
 return {
 

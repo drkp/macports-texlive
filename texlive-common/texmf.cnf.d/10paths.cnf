@@ -46,10 +46,10 @@ TEXMFSYSCONFIG = @@TEXMFSYSCONFIG@@
 TEXMFHOME = ~/@@TEXMFHOME@@
 
 % TEXMFVAR, where texconfig/updmap/fmtutil store cached runtime data.
-TEXMFVAR = ~/.texlive2024/texmf-var
+TEXMFVAR = ~/.texlive2025/texmf-var
 
 % TEXMFCONFIG, where texconfig/updmap/fmtutil store configuration data.
-TEXMFCONFIG = ~/.texlive2024/texmf-config
+TEXMFCONFIG = ~/.texlive2025/texmf-config
 
 % This is the value manipulated by tlmgr's auxtrees subcommand in the
 % root texmf.cnf. Kpathsea warns about a literally empty string for a
@@ -419,8 +419,8 @@ MAILCAPLIBDIR = @@PREFIX@@/etc
 % but the postaction for xetex uses all of these on all systems.
 % 
 FONTCONFIG_FILE = fonts.conf
-FONTCONFIG_PATH = $TEXMFSYSVAR/fonts/conf
-FC_CACHEDIR = $TEXMFSYSVAR/fonts/cache
+XE_FONTCONFIG_PATH = $TEXMFSYSVAR/fonts/conf
+XE_FC_CACHEDIR = $TEXMFSYSVAR/fonts/cache
 
 % TeX documentation and source files, for use with texdoc and kpsewhich.
 TEXDOCS = $TEXMF/doc//
