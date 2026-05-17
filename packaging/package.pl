@@ -7,21 +7,20 @@ use File::Basename;
 use List::MoreUtils qw(uniq);
 
 BEGIN {
-    unshift (@INC, "/scratch/texlive-trunk/Master/tlpkg");
+    unshift (@INC, "/u/dan/texlive-trunk/Master/tlpkg");
 }
 
 use TeXLive::TLPDB;
 use TeXLive::TLPOBJ;
-use File::Basename;
 
 
 #
 # Configuration
 #
 
-my $tlpdb = TeXLive::TLPDB->new(root => "/scratch/texlive-trunk/Master");
-my $STAGE = "/u/dan/sandbox/macports-texlive/packaging/stage/";
-my $TEXMFSRC = "/scratch/texlive-trunk/Master";
+my $tlpdb = TeXLive::TLPDB->new(root => "/u/dan/texlive-trunk/Master");
+my $STAGE = "/u/dan/sandbox/macports-texlive/packaging/stage";
+my $TEXMFSRC = "/u/dan/texlive-trunk/Master";
 my $PORTFILES = "/u/dan/sandbox/macports-texlive/packaging/portfiles";
 my $PORTFILEINCLUDE = "/u/dan/sandbox/macports-texlive/packaging/portfileinclude";
 my $EXISTINGPORTFILES = "/u/dan/sandbox/macports-ports/tex/";
@@ -39,7 +38,7 @@ my $USE_EXISTING_PACKAGE_IF_SAME_VERSION=1;
 my @skip_collections = qw(collection-documentation-greek collection-texinfo collection-texworks collection-wintools);
 
 # Individual packages to skip
-my @skip_packages = qw(texlive-msg-translations texlive.infra xindy asymptote latexmk detex t1utils psutils pstools ps2eps dvi2tty getafm pdfjam latexdiff biber dvipng dot2texi lcdftypetools dvisvgm);
+my @skip_packages = qw(texlive-msg-translations texlive.infra xindy asymptote latexmk detex t1utils psutils pstools ps2eps dvi2tty getafm pdfjam latexdiff biber dvipng dot2texi lcdftypetools dvisvgm man);
 
 # Binaries we don't build
 my @skip_binaries = qw(xdvi-xaw luametatex);
@@ -127,7 +126,7 @@ sub process_collection {
         }
     }
     foreach my $tlpname (@queue) {
-        if ($tlpname ~~ @skip_packages) {
+        if (grep { $_ eq $tlpname } @skip_packages) {
             print("  Skipping individual package $tlpname\n");
             next;
         }
@@ -163,7 +162,7 @@ sub process_collection {
             push(@srcfiles, $tlp->srcfiles);
             for my $binfile (@{$tlp->binfiles->{'universal-darwin'}}) {
                 #print " $tlpname provides $binfile\n";
-                if (!(basename($binfile) ~~ @skip_binaries)) {
+                if (!grep { $_ eq basename($binfile) } @skip_binaries) {
                     $binfiles{basename($binfile)} = 1;
                 }
             }
@@ -218,7 +217,7 @@ sub process_collection {
     # Check dependencies
     my %colldepsprovide;        # list of TL pkgs provided by colldeps
     foreach my $col (@colldepends) {
-        my ($deprcols, $deprpkgs) = transitive_closure_of_colldepends($collection);
+        my ($deprcols, $deprpkgs) = transitive_closure_of_colldepends($col);
         foreach my $pkg (keys %$deprpkgs) {
             $colldepsprovide{$pkg} = 1;
         }
@@ -257,20 +256,23 @@ sub process_collection {
             foreach (@pkgs) {
                 print INFO "$_->[0] $_->[1]\n";
             }
+            close INFO;
             open(INFO, ">", "$pkginfodir/docfiles");
             foreach (@docfiles) {
                 system "mkdir -p $pkgdir/docfiles/".dirname($_);
                 if (system("cp -a $TEXMFSRC/$_ $pkgdir/docfiles/$_") == 0) {
                     print INFO "$_\n";
                 }
-            }    
+            }
+            close INFO;
             open(INFO, ">", "$pkginfodir/runfiles");
             foreach (@runfiles) {
                 system "mkdir -p $pkgdir/runfiles/".dirname($_);
                 if (system("cp -a $TEXMFSRC/$_ $pkgdir/runfiles/$_") == 0) {
                     print INFO "$_\n";
                 }
-            }    
+            }
+            close INFO;
             open(INFO, ">", "$pkginfodir/srcfiles");
             foreach (@srcfiles) {
                 system "mkdir -p $pkgdir/srcfiles/".dirname($_);
@@ -279,9 +281,9 @@ sub process_collection {
                 }
             }
             close INFO;
-            system "cd $STAGE && tar -cf $distname-run.tar $distname --exclude $distname/docfiles --exclude $distname/srcfiles && xz $distname-run.tar";
-            system "cd $STAGE && tar -cf $distname-doc.tar $distname/docfiles && xz $distname-doc.tar";
-            system "cd $STAGE && tar -cf $distname-src.tar $distname/srcfiles && xz $distname-src.tar";
+            system "cd $STAGE && tar -cf $distname-run.tar --exclude $distname/docfiles --exclude $distname/srcfiles $distname && xz -9 $distname-run.tar";
+            system "cd $STAGE && tar -cf $distname-doc.tar $distname/docfiles && xz -9 $distname-doc.tar";
+            system "cd $STAGE && tar -cf $distname-src.tar $distname/srcfiles && xz -9 $distname-src.tar";
         }
     }
 
@@ -336,7 +338,7 @@ sub process_collection {
         } else {
             $longdesc = $tlc->shortdesc;
         }
-        $longdesc =~ s/;/\\;/;
+        $longdesc =~ s/;/\\;/g;
         mkdir "$PORTFILES/$portname";
         open(PORTFILE, ">", "$PORTFILES/$portname/Portfile");
         print PORTFILE <<"EOF";
@@ -425,7 +427,7 @@ if ($MAKE_PORTFILES) {
 
 
 foreach my $pkg ($tlpdb->collections()) {
-   if ($pkg ~~ @skip_collections) {
+   if (grep { $_ eq $pkg } @skip_collections) {
        print("Skipping $pkg\n");
        next;
    }
