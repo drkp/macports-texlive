@@ -9,9 +9,14 @@
 % The path definitions here assume the directories are organized
 % according to the TeX Directory Structure (http://tug.org/tds).
 %
-% You may wish to use one of the $SELFAUTO... variables here so TeX will
-% find where to look dynamically.  See the manual and the definition
-% below of TEXMFCNF.
+% Redistributors will probably want $SELFAUTODIR/share, i.e., /usr/share.
+% Kpathsea sets (in kpathsea/progname.c):
+% SELFAUTOLOC (directory of the binary=/usr/local/texlive/YYYY/bin/i386-linux),
+% SELFAUTODIR (its parent = /usr/local/texlive/YYYY/bin), 
+% SELFAUTOPARENT (its grandparent = /usr/local/texlive/YYYY), and
+% SELFAUTOGRANDPARENT (its great-grandparent = /usr/local/texlive).
+% Sorry for the off-by-one-generation names.
+TEXMFROOT = $SELFAUTOPARENT
 
 % Normally the root directory of all texmf trees, but we don't exactly
 % have that. Mostly, we don't use it (and use absolute paths instead),
@@ -46,10 +51,10 @@ TEXMFSYSCONFIG = @@TEXMFSYSCONFIG@@
 TEXMFHOME = ~/@@TEXMFHOME@@
 
 % TEXMFVAR, where texconfig/updmap/fmtutil store cached runtime data.
-TEXMFVAR = ~/.texlive2025/texmf-var
+TEXMFVAR = ~/.texlive2026/texmf-var
 
 % TEXMFCONFIG, where texconfig/updmap/fmtutil store configuration data.
-TEXMFCONFIG = ~/.texlive2025/texmf-config
+TEXMFCONFIG = ~/.texlive2026/texmf-config
 
 % This is the value manipulated by tlmgr's auxtrees subcommand in the
 % root texmf.cnf. Kpathsea warns about a literally empty string for a

@@ -1,148 +1,210 @@
--- todo: come up with an auto-texlive identification (texmf-dist)
+-- ConTeXt Packaging Scripts
+-- https://github.com/gucci-on-fleek/context-packaging
+-- SPDX-License-Identifier: GPL-2.0-or-later
+-- SPDX-FileCopyrightText: 2024 Hans Hagen
+-- SPDX-FileCopyrightText: 2026 Max Chernoff
 
-local hiddentexlivepath = ".texlive2025"
+-- Note that this file will be overwritten on upgrades, so users should place
+-- any modifications in another location!
+
+-- It is recommended that downstream distributors only modify the variables in
+-- the following section (although you can modify any other section if you know
+-- what you are doing).
+
+--- BEGIN RECOMMENDED MODIFICATIONS SECTION ---
+
+-- Information about who provided this installation of ConTeXt. If you modify
+-- this file (or any of the other ConTeXt files) and redistribute these changes,
+-- you should also change this value to something appropriate for your
+-- distribution.
+local distribution_name = "TeX Live/MacPorts"
+
+-- A URL where users can find more information about this distribution of
+-- ConTeXt, and especially where they can report bugs. Again, if you modify this
+-- file, you should also modify this field.
+local distribution_url = "https://github.com/gucci-on-fleek/context-packaging"
+
+-- The version of the distribution itself; unrelated to the version of ConTeXt.
+local distribution_version = "2026"
+
+-- Sometimes TeX Live needs to release more than one update for a single
+-- upstream ConTeXt release, so TeX Live adds a single uppercase letter suffix
+-- to the version number for each update. A suffix of "A" indicates the first
+-- release (this is the most common case), "B" indicates the second release, and
+-- so on. If you are a downstream distributor, you can use this field for your
+-- own purposes; any string is valid, but it should be unique for each release
+-- for any given upstream version of ConTeXt. This is just the suffix though, so
+-- the full version number looks something like "1950.02.10 15:41 A", where
+-- "1950.02.10 15:41" is the upstream version provided by ConTeXt itself and "A"
+-- is the suffix added by TeX Live.
+local package_revision = "@@REVISION@@"
+
+-- The location of the distribution's TEXMF tree. The contents stored in this
+-- path should not be modified by users, and are solely managed by the
+-- distribution itself.
+local distribution_path = "@@TEXMFDIST@@"
+
+-- Where ConTeXt should store any caches. There is a single "system" folder for
+-- the entire computer, and this folder is typically only writable by
+-- root/administrators. There is a separate "user" folder for each user, and
+-- users can freely modify these files. Note that at least one of these folders
+-- must be writable by ConTeXt at runtime, or else ConTeXt will refuse to run.
+-- These folders should be persistent (so not in a temporary directory);
+-- however, it is generally safe to delete them at any time.
+local system_cache = "@@TEXMFSYSVAR@@"
+local user_cache   = "home:.texlive2026"
+
+-- Where ConTeXt should search for custom files. "system" and "user" have the
+-- same meaning as above. ConTeXt will never write to or otherwise modify these
+-- files itself.
+local system_data = "@@TEXMFLOCAL@@"
+local user_data   = "home:texmf"
+
+-- The location of non-TeX files optionally used by ConTeXt. Different paths are
+-- separated by semicolons (";"), and a trailing double slash ("//") indicates
+-- that the directory should be searched recursively.
+local nontex_fonts, nontex_colors
+if os.type == "windows" then
+    nontex_fonts = "\z
+        home:AppData/Local/Microsoft/Windows/Fonts;\z
+        C:/Windows/Fonts;\z
+    "
+    nontex_colors = "" -- No idea where this is on Windows; patches welcome
+elseif os.name == "macosx" then
+    nontex_fonts = "\z
+        home:Library/Fonts;\z
+        /Library/Fonts;\z
+        /System/Library/Fonts;\z
+    "
+    nontex_colors = "" -- No idea where this is on macOS; patches welcome
+else -- Linux, BSD, etc.
+    nontex_fonts = "\z
+        home:.local/share/fonts;\z
+        /usr/local/share/fonts//;\z
+        /usr/share/fonts//;\z
+    "
+    nontex_colors = "\z
+        home:.local/share/icc//;\z
+        /usr/local/share/color/icc//;\z
+        /usr/share/color/icc//;\z
+    "
+end
+
+-- Programs that should be allowed to run in restricted mode. Note that this is
+-- provided as a convenience feature only, and is **NOT** a security feature.
+-- Users must not compile untrusted ConTeXt documents without using external
+-- sandboxing mechanisms (Docker, Bubblewrap, systemd-run, etc.). ConTeXt runs
+-- in unrestricted mode by default, meaning that this list is ignored entirely
+-- and documents can freely execute arbitrary programs.
+local allowed_programs = table.concat({
+    "bibtex",
+    "bibtex8",
+    "extractbb",
+    "gregorio",
+    "kpsewhich",
+    "l3sys-query",
+    "latexminted",
+    "makeindex",
+    "memoize-extract.pl",
+    "memoize-extract.py",
+    "r-mpost",
+    "repstopdf",
+    "texosquery-jre8",
+}, ",")
+--- END RECOMMENDED MODIFICATIONS SECTION ---
 
 return {
-
+    -- Metadata about this configuration file. (Copied from the original
+    -- "texlivecnf.lua" file in the upstream ConTeXt Standalone Distribution.)
     type    = "configuration",
     version = "1.1.3",
-    date    = "2024-02-10", -- 2021-05-12 2011-06-02
+    date    = "2024-02-10",
     time    = "14:59:00",
     comment = "ConTeXt MkIV and LMTX configuration file",
-    author  = "Hans Hagen, PRAGMA-ADE, Hasselt NL",
+    author  = "Hans Hagen & Max Chernoff",
     target  = "texlive",
 
+    -- Metadata used to identify this distribution of ConTeXt.
+    details = {
+        name = distribution_name .. distribution_version,
+        url = distribution_url,
+        version = package_revision,
+        comment = "Based off of TeX Live (2026-02-19 11:49 A)",
+
+        -- Extra non-standard information
+        private = {
+            distribution_name = distribution_name,
+            distribution_version = distribution_version,
+            package_revision = package_revision,
+
+            -- In case distributors have modified the above three variables,
+            -- we'll add a static variable here so that it's clear whether this
+            -- file was based directly off of the original "texmfcnf.lua" file
+            -- from the upstream ConTeXt Standalone Distribution, or from the
+            -- TeX Live distribution's modified version. (It usually makes the
+            -- most sense to rely on the distributor-provided variables, so most
+            -- users should prefer inspecting the variables above instead of
+            -- this one.)
+            derived_from = "TeX Live (2026-02-19 11:49 A)",
+        }
+    },
+
+    -- Here are the "real" variables that affect ConTeXt's runtime behaviour.
     content = {
-
-        -- Originally there was support for engines and progname but I don't expect other engines to
-        -- use this file, so first engines were removed. After that if made sense also to get rid of
-        -- progname. In principle we could support multiple formats here (using subtables) but time
-        -- has demonstrated that we only have one format (the original ideas was to make a base layer
-        -- but I don't see it being used to it would be  waste of time). So, after a decade it was
-        -- time to prune and update this file, also because LMTX has a few more features.
-
+        -- File/directory locations
         variables = {
+            -- System trees
+            TEXMFDIST      = distribution_path,
+            TEXMFLOCAL     = system_data,
+            -- MacPorts: texmf installed by non-texlive ports
+            TEXMFPORTS     = "@@TEXMFPORTS@@",
+            TEXMFSYSCONFIG = "@@TEXMFSYSCONFIG@@",
+            TEXMFSYSVAR    = "@@TEXMFSYSVAR@@",
 
-            -- The following variable is predefined (but can be overloaded) and in most cases you can
-            -- leave this one untouched. The built-in definition permits relocation of the tree.
-            --
-            --  if this_is_texlive then
-            --      resolvers.luacnfspec = 'selfautodir:;selfautoparent:;{selfautodir:,selfautoparent:}{/share,}/texmf{-local,}/web2c'
-            --  else
-            --      resolvers.luacnfspec = 'home:texmf/web2c;selfautoparent:texmf{-local,-context,}/web2c'
-            --  end
-            --
-            -- more readable is:
-            --
-            -- TEXMFCNF     = {
-            --     "home:texmf/web2c,
-            --     "selfautoparent:texmf-local/web2c",
-            --     "selfautoparent:texmf-context/web2c",
-            --     "selfautoparent:texmf/web2c",
-            -- }
+            -- User trees
+            TEXMFCONFIG = user_cache .. "/texmf-config",
+            TEXMFVAR    = user_cache .. "/texmf-var",
+            TEXMFHOME   = user_data,
 
-            -- We have only one cache path but there can be more. The first writable one will be taken
-            -- but there can be more readable paths.
+            -- Search paths
+            TEXMFCACHE = "$TEXMFSYSVAR;$TEXMFVAR",
+            TEXMF      = "{\z
+                              $TEXMFCONFIG,\z
+                              $TEXMFHOME,\z
+                              !!$TEXMFSYSCONFIG,\z
+                              !!$TEXMFSYSVAR,\z
+                              !!$TEXMFLOCAL,\z
+                              !!$TEXMFPORTS,\z
+                              !!$TEXMFDIST\z
+                          }",
 
-            -- standalone:
+            -- Input locations: TeX
+            TEXINPUTS = ".;$TEXMF/tex/{context,generic,luatex}//",
 
-         -- TEXMFCACHE      = "$SELFAUTOPARENT/texmf-cache",
-
-            -- texlive
-
-            TEXMFVAR        = "home:" .. hiddentexlivepath .. "/texmf-var",
-            TEXMFCONFIG     = "home:" .. hiddentexlivepath .. "/texmf-config",
-            TEXMFSYSVAR     = "@@TEXMFSYSVAR@@",
-            TEXMFCACHE      = "$TEXMFSYSVAR;$TEXMFVAR",
-
-            -- I don't like this texmf under home and texmf-home would make more sense. One never knows
-            -- what installers put under texmf anywhere and sorting out problems will be a pain. But on
-            -- the other hand ... home mess is normally the users own responsibility.
-            --
-            -- By using prefixes we don't get expanded paths in the cache __path__ entry. This makes the
-            -- tex root relocatable.
-
-            TEXMFOS         = "@@TEXLIVE_BINDIR@@",
-            TEXMFDIST       = "@@TEXMFDIST@@",
-
-            TEXMFLOCAL      = "@@TEXMFLOCAL@@",
-            TEXMFPORTS      = "@@TEXMFPORTS@@",
-            TEXMFSYSCONFIG  = "@@TEXMFSYSCONFIG@@",
-            TEXMFFONTS      = "@@PREFIX@@/share/texmf-fonts",
-            TEXMFPROJECT    = "@@PREFIX@@/share/texmf-project",
-
-            TEXMFHOME       = "home:texmf",
-
-            -- We need texmfos for a few rare files but as I have a few more bin trees a hack is needed.
-            -- Maybe other users also have texmf-platform-new trees, but so far I've never heard of it.
-
-            TEXMF           = "{$TEXMFCONFIG,$TEXMFHOME,!!$TEXMFSYSCONFIG,!!$TEXMFSYSVAR,!!$TEXMFPROJECT,!!$TEXMFFONTS,!!$TEXMFLOCAL,!!$TEXMFPORTS,!!$TEXMFDIST}",
-
-            TEXFONTMAPS     = ".;$TEXMF/fonts/data//;$TEXMF/fonts/map/{pdftex,dvips}//",
-            ENCFONTS        = ".;$TEXMF/fonts/data//;$TEXMF/fonts/enc/{dvips,pdftex}//",
-            VFFONTS         = ".;$TEXMF/fonts/{data,vf}//",
-            TFMFONTS        = ".;$TEXMF/fonts/{data,tfm}//",
-            PKFONTS         = ".;$TEXMF/fonts/{data,pk}//",
-            T1FONTS         = ".;$TEXMF/fonts/{data,type1}//;$OSFONTDIR",
-            AFMFONTS        = ".;$TEXMF/fonts/{data,afm}//;$OSFONTDIR",
-            TTFONTS         = ".;$TEXMF/fonts/{data,truetype}//;$OSFONTDIR",
-            OPENTYPEFONTS   = ".;$TEXMF/fonts/{data,opentype}//;$OSFONTDIR",
-            FONTFEATURES    = ".;$TEXMF/fonts/{data,fea}//;$OPENTYPEFONTS;$TTFONTS;$T1FONTS;$AFMFONTS",
-            FONTCIDMAPS     = ".;$TEXMF/fonts/{data,cid}//",
-            OFMFONTS        = ".;$TEXMF/fonts/{data,ofm,tfm}//",
-            OVFFONTS        = ".;$TEXMF/fonts/{data,ovf,vf}//",
-
-            TEXINPUTS       = ".;$TEXMF/tex/{context,plain/base,generic}//",
-            MPINPUTS        = ".;$TEXMF/metapost/{context,base,}//",
-
-            -- In the next variable the inputs path will go away.
-
-            TEXMFSCRIPTS    = ".;$TEXMF/scripts/context/{lua,ruby,python,perl}//;$TEXINPUTS",
-            PERLINPUTS      = ".;$TEXMF/scripts/context/perl",
-            PYTHONINPUTS    = ".;$TEXMF/scripts/context/python",
-            RUBYINPUTS      = ".;$TEXMF/scripts/context/ruby",
-            LUAINPUTS       = ".;$TEXINPUTS;$TEXMF/scripts/context/lua//",
-            CLUAINPUTS      = ".;@@PREFIX@@/lib/$engine//",
-
-            -- Not really used by MkIV so they might go away.
-
-            BIBINPUTS       = ".;$TEXMF/bibtex/bib//;$TEXMF/tex/context//",
-            BSTINPUTS       = ".;$TEXMF/bibtex/bst//;$TEXMF/tex/context//",
-
-            -- Experimental
-
-            ICCPROFILES     = ".;$TEXMF/tex/context/colors/{icc,profiles}//;$OSCOLORDIR",
-
-            -- A few special ones that will change some day.
-
-            FONTCONFIG_FILE = "fonts.conf",
-
-            -- standalone
-
-         -- FONTCONFIG_PATH = "$TEXMFSYSTEM/fonts/conf",
-
-            --texlive 
-
+            -- Input locations: Fonts
+            TTFONTS         = ".;" .. nontex_fonts ..
+                              "$TEXMF/fonts/truetype//;$OSFONTDIR",
+            OPENTYPEFONTS   = ".;" .. nontex_fonts ..
+                              "$TEXMF/fonts/opentype//;$OSFONTDIR",
             FONTCONFIG_PATH = "$TEXMFSYSVAR/fonts/conf",
+            OSFONTDIR       = nontex_fonts,
 
+            -- Input locations: Lua
+            TEXMFSCRIPTS = ".;$TEXMF/scripts/context//;$TEXINPUTS",
+            LUAINPUTS    = ".;$TEXINPUTS;$TEXMF/scripts/context/lua//",
+            CLUAINPUTS   = "@@PREFIX@@/lib/$engine//", -- No "."; insecure
+
+            -- Input locations: Other
+            MPINPUTS    = ".;$TEXMF/metapost//",
+            BIBINPUTS   = ".;$TEXMF/bibtex/bib//;$TEXMF/tex/context/bib//",
+            ICCPROFILES = ".;" .. nontex_colors ..
+                          "$TEXMF/tex/context/colors//;$OSCOLORDIR",
         },
 
-        -- We have a few reserved subtables. These control runtime behaviour. Some are frozen at
-        -- at startup time, others can be changed any time.
-
+        -- Engine parameters. These were copied from the original ConTeXt file;
+        -- don't change these unless you know what you are doing!
         directives = {
-
-            -- The default settings are actually set at startup so the values below overload
-            -- them. You can also specify a plus field which will bump a value and in LMTX a
-            -- step field that sets the incremental allocation of memory (because there we don't
-            -- allocate all at once).
-
-            -- texconfig.max_print_line  =   100000
-            -- texconfig.function_size   =    32768
-            -- texconfig.properties_size =    10000
-
-            -- These are for luametatex:
-
+            -- LuaMetaTeX engine parameters
             ["luametatex.errorlinesize"]     = { size =      250                 }, -- max =       255
             ["luametatex.halferrorlinesize"] = { size =      250                 }, -- max =       255
             ["luametatex.expandsize"]        = { size =    10000                 }, -- max =   1000000
@@ -162,100 +224,38 @@ return {
             ["luametatex.marksize"]          = { size =      250, step =      50 }, -- max =     10000
             ["luametatex.insertsize"]        = { size =      250, step =      25 }, -- max =       250
 
-            -- These are for luatex:
+            -- LuaTeX engine parameters
+            ["luatex.errorline"]     =    250,
+            ["luatex.halferrorline"] =    125,
+            ["luatex.expanddepth"]   =  10000,
+            ["luatex.hashextra"]     = 100000,
+            ["luatex.nestsize"]      =   1000,
+            ["luatex.maxinopen"]     =    500,
+            ["luatex.maxprintline"]  =  10000,
+            ["luatex.maxstrings"]    = 500000,
+            ["luatex.paramsize"]     =  25000,
+            ["luatex.savesize"]      = 100000,
+            ["luatex.stacksize"]     = 100000,
 
-            ["luatex.errorline"]         =    250,
-            ["luatex.halferrorline"]     =    125,
-            ["luatex.expanddepth"]       =  10000,
-            ["luatex.hashextra"]         = 100000,
-            ["luatex.nestsize"]          =   1000,
-            ["luatex.maxinopen"]         =    500,
-            ["luatex.maxprintline"]      =  10000,
-            ["luatex.maxstrings"]        = 500000,
-            ["luatex.paramsize"]         =  25000,
-            ["luatex.savesize"]          = 100000,
-            ["luatex.stacksize"]         = 100000,
+            -- mtxrun parameters
+            ["system.errorcontext"]    = "10",
+            ["system.compile.cleanup"] = "no",  -- remove tma files
+            ["system.compile.strip"]   = "yes", -- strip tmc files
 
-            -- A few process related variables come next.
+            -- I/O restrictions
+            ["system.outputmode"] = "restricted",
+            ["system.inputmode"]  = "any",
 
-         -- ["system.checkglobals"]      = "10",
-         -- ["system.nostatistics"]      = "yes",
-            ["system.errorcontext"]      = "10",
-            ["system.compile.cleanup"]   = "no",    -- remove tma files
-            ["system.compile.strip"]     = "yes",   -- strip tmc files
+            -- Execution restrictions
+            ["system.commandmode"]   = "list", -- none | list | all
+            ["system.executionmode"] = "list", -- none | list | all
+            ["system.commandlist"]   = allowed_programs,
+            ["system.executionlist"] = allowed_programs,
+            ["system.librarymode"]   = "none", -- none | list | all
 
-            -- The io modes are similar to the traditional ones. Possible values are all, paranoid
-            -- and restricted.
-
-            ["system.outputmode"]        = "restricted",
-            ["system.inputmode"]         = "any",
-
-            -- The following variable is under consideration. We do have protection mechanims but
-            -- it's not enabled by default.
-
-            ["system.commandmode"]       = "any", -- any none list
-            ["system.commandlist"]       = "mtxrun, convert, inkscape, gs, imagemagick, curl, bibtex, pstoedit",
-
-            -- The mplib library support mechanisms have their own configuration. Normally these
-            -- variables can be left as they are.
-
-            ["mplib.texerrors"]          = "yes",
-
-            -- Normally you can leave the font related directives untouched as they only make sense
-            -- when testing.
-
-         -- ["fonts.autoreload"]         = "no",
-         -- ["fonts.otf.loader.cleanup"] = "0",     -- 0 1 2 3
-
-            -- In an edit cycle it can be handy to launch an editor. The
-            -- preferred one can be set here.
-
-         -- ["pdfview.method"]           = "sumatra",
-
-         -- ["system.engine"]            = "luajittex",
-         -- ["fonts.usesystemfonts"]     = false,
-         -- ["modules.permitunprefixed"] = false,
-         -- ["resolvers.otherwise"]      = false,
-
-         -- Sandboxing has been available for a while but is probably never used to maybe that mechanism
-         -- should be removed some day. Normally you will configure this in a local configuration file. By
-         -- default we are rather permissive. The next list comes from my machine:
-
-         -- ["system.rootlist"]      = { "/data" }, -- { { "/data", "read" }, ... }
-
-      --    ["system.executionmode"] = "list", -- none | list | all
-      --    ["system.executionlist"] = {
-      --        "context",
-      --        "bibtex", "mlbibcontext",
-      --        "curl",
-      --        "gswin64c", "gswin32c", "gs",
-      --        "gm", "graphicmagick",
-      --        "pdftops",
-      --        "pstoedit",
-      --        "inkscape",
-      --        "woff2_decompress",
-      --        "hb-shape",
-      --    },
-      --
-      --    ["system.librarymode"]   = "list", -- none | list | all
-      --    ["system.librarylist"]   = {
-      --        "mysql",
-      --        "sqlite3",
-      --        "libharfbuzz", "libharfbuzz-0",
-      --    },
-      -- -- ["system.librarynames"]  = {
-      -- --     ["libcurl"] = { "libcurl", "libcurl-4" },
-      -- -- },
-
+            -- Metapost
+            ["mplib.texerrors"] = "yes",
         },
-
-        experiments = {
-            ["fonts.autorscale"] = "yes",
-        },
-
-        trackers = {
-        },
-
     },
 
 }
