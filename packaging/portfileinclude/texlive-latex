@@ -1,7 +1,14 @@
 pre-activate {
-    # Handle conflicts for TL2024 upgrade
+    # Handle conflicts for TL2025 upgrade
     if { ![catch {set vers [lindex [registry_active texlive-latex-recommended] 0]}]
-         && ([vercmp [lindex $vers 1] 70491] < 0) } {
+         && ([vercmp [lindex $vers 1] 74487] < 0) } {
         registry_deactivate_composite texlive-latex-recommended "" [list ports_nodepcheck 1]
     }
+
+    # Handle conflicts for TL2026 upgrade
+    if { ![catch {set vers [lindex [registry_active texlive-luatex] 0]}]
+         && ([vercmp [lindex $vers 1] 78219] < 0) } {
+        registry_deactivate_composite texlive-luatex "" [list ports_nodepcheck 1]
+    }
+
 }
